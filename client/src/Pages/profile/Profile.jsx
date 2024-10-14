@@ -50,7 +50,6 @@ function Profile() {
       dispatch(setFirstName(user.firstName));
       dispatch(setLastName(user.lastName));
       dispatch(setSelectedColor(user.color));
-
       if (user.image) {
         dispatch(setImage(`${HOST}/${user.image}`));
         dispatch(setTempImage(`${HOST}/${user.image}`));
@@ -182,7 +181,7 @@ function Profile() {
                     className="hidden"
                     onChange={handleUploadImage}
                     name="profile-image"
-                    accept=".png, .jpg, .jpeg, .swg, .webp,"
+                    accept=".png, .jpg, .jpeg, .swg, .webp, .gif"
                   />
                 </div>
                 <div className="flex flex-col gap-5 text-white items-center justify-center">

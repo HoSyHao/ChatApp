@@ -1,8 +1,9 @@
+/* eslint-disable react/react-in-jsx-scope */
 /* eslint-disable react/prop-types */
 import { Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { verify } from '../Features/authSlice';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 const PrivateRoute = ({ element: Component }) => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const PrivateRoute = ({ element: Component }) => {
   }, [dispatch]);
 
   if (!user) {
+    localStorage.removeItem("user")
     return <Navigate to="/login" replace />;
   }
 

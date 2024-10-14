@@ -1,3 +1,4 @@
+/* eslint-disable react/react-in-jsx-scope */
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { setLoginForm, signin, clearError, setUserInfo } from '../../Features/authSlice';

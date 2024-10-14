@@ -25,13 +25,16 @@ export const signin = async (request, response) => {
       });
     }
 
+    
+    console.log("Password entered by user:", password); 
+
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
       return response
         .status(400)
         .json({ status: false, message: "Password is incorrect" });
     }
-
+    console.log("User password from DB:", validPassword);
     const token = createToken(email, user.id);
 
     response.cookie("token", token, {

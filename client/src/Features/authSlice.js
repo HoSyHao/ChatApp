@@ -77,7 +77,11 @@ export const forgotPassword = createAsyncThunk(
   "auth/forgotPassword",
   async ({ email }, { rejectWithValue }) => {
     try {
-      const response = await apiClient.post(FORGET_ROUTE, { email }, { withCredentials: true });
+      const response = await apiClient.post(
+        FORGET_ROUTE,
+        { email },
+        { withCredentials: true }
+      );
       if (response.data.status === false) {
         return rejectWithValue(response.data.message);
       }
@@ -94,9 +98,13 @@ export const resetPassword = createAsyncThunk(
   "auth/resetPassword",
   async ({ token, password }, { rejectWithValue }) => {
     try {
-      const response = await apiClient.post(RESETP_ROUTE + `${token}`, {
-        password,
-      }, { withCredentials: true });
+      const response = await apiClient.post(
+        RESETP_ROUTE + `${token}`,
+        {
+          password,
+        },
+        { withCredentials: true }
+      );
       if (response.data.status === false) {
         return rejectWithValue(response.data.message);
       }
@@ -113,7 +121,9 @@ export const logout = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await apiClient.get(LOGOUT_ROUTE, { withCredentials: true });
+      const response = await apiClient.get(LOGOUT_ROUTE, {
+        withCredentials: true,
+      });
       if (response.data.status === false) {
         return rejectWithValue(response.data.message);
       }
@@ -177,7 +187,7 @@ export const uploadImage = createAsyncThunk(
       const response = await apiClient.post(UPLOAD_IMAGE_ROUTE, formData, {
         withCredentials: true,
       });
-      
+
       if (response.data.status === false) {
         return rejectWithValue(response.data.message);
       }
@@ -208,7 +218,6 @@ export const deleteImage = createAsyncThunk(
     }
   }
 );
-
 
 const authSlice = createSlice({
   name: "auth",
