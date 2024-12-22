@@ -11,7 +11,7 @@ import { uploadFile, setIsUploading, addDirectMessageContact} from "@/Features/c
 
 const MessageBar = () => {
   const dispatch = useDispatch();
-  const socket = useSocket();
+  const {socket} = useSocket();
   const fileInputRef = useRef();
   const {
     selectedChatType,
@@ -49,7 +49,7 @@ const MessageBar = () => {
     }
     
     if (selectedChatType === "contact") {
-      socket.current.emit("sendMessage", {
+      socket.emit("sendMessage", {
         sender: user.id,
         content: message,
         recipient: selectedChatData._id,
@@ -63,7 +63,7 @@ const MessageBar = () => {
         dispatch(addDirectMessageContact(selectedChatData));
       }
     }else if(selectedChatType === "channel"){
-      socket.current.emit("send-channel-message", {
+      socket.emit("send-channel-message", {
         sender: user.id,
         content: message,
         messageType: "text",
@@ -96,7 +96,7 @@ const MessageBar = () => {
         dispatch(setIsUploading(false))
 
         if (selectedChatType === "contact") {
-          socket.current.emit("sendMessage", {
+          socket.emit("sendMessage", {
             sender: user.id,
             content: undefined,
             recipient: selectedChatData._id,
@@ -104,7 +104,7 @@ const MessageBar = () => {
             fileUrl: response,
           });
         } else if(selectedChatType === "channel"){
-          socket.current.emit("send-channel-message", {
+          socket.emit("send-channel-message", {
             sender: user.id,
             content: undefined,
             messageType: "file",
@@ -123,6 +123,11 @@ const MessageBar = () => {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if(e.key === 'Enter'){
+      handleSendMessage();
+    }
+  }
   return (
     <div className="h-[10vh] bg-[#1c1d25] flex justify-center items-center px-8 mb-6 gap-6">
       <div className="flex-1 flex bg-[#2a2b33] rounded-md items-center gap-5 pr-5">
@@ -132,6 +137,7 @@ const MessageBar = () => {
           placeholder="Enter Message"
           value={message}
           onChange={handleMessageChange}
+          onKeyDown={handleKeyDown}
         />
         <button
           onClick={handleAttachmentClick}

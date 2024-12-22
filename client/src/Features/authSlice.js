@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import Cookies from "js-cookie";
+
 import { apiClient } from "@/lib/api-client.js";
 import {
   SIGNUP_ROUTE,
@@ -140,9 +140,8 @@ export const verify = createAsyncThunk(
   "auth/verify",
   async (_, { rejectWithValue }) => {
     try {
-      const token = Cookies.get("token", { withCredentials: true });
       const response = await apiClient.get(VERIFY_ROUTE, {
-        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
       });
       if (response.data.status === false) {
         return rejectWithValue(response.data.message);
@@ -279,6 +278,7 @@ const authSlice = createSlice({
     setIsImageDeleted: (state, action) => {
       state.isImageDeleted = action.payload;
     },
+  
   },
 
   extraReducers: (builder) => {
@@ -421,5 +421,6 @@ export const {
   setUserInfo,
   setTempImage,
   setIsImageDeleted,
+ 
 } = authSlice.actions;
 export default authSlice.reducer;

@@ -11,6 +11,7 @@ import messagesRoutes from "./routes/MessegesRoute.js"
 import channelRoutes from "./routes/ChannelRoutes.js"
 
 const app = express()
+
 app.use(express.json())
 app.use(cors({
     origin: [process.env.ORIGIN],

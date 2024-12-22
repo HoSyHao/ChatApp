@@ -1,3 +1,5 @@
+
+
 import React from 'react';
 import './assets/App.css';
 import Login from './Pages/auth/Login';
@@ -9,6 +11,9 @@ import PrivateRoute from './Components/PrivateRoute';
 import { Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
 import Profile from './Pages/profile/Profile';
 import AuthRoute from './Components/AuthRoute';
+import CallNotification from './Pages/call/components/CallNotification';
+import Call from './Pages/call';
+import VideoCall from './Pages/call/components/VideoCall';
 
 function App() {
   return (
@@ -26,7 +31,9 @@ function App() {
         {/* Private routes - chỉ cho người dùng đã đăng nhập truy cập */}
         <Route path="/home" element={<PrivateRoute element={Home} />} />
         <Route path="/profile" element={<PrivateRoute element={Profile} />} />
+        <Route path="/call" element={<PrivateRoute element={Call} />} />
       </Routes>
+      <CallNotification />
     </BrowserRouter>
   );
 }

@@ -13,11 +13,15 @@ import { FiEdit2 } from "react-icons/fi";
 import { IoPowerSharp} from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { logout } from "@/Features/authSlice";
+import { useSocket } from "@/context/SocketContext";
 
 const ProfileInfo = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+  const { onlineUsers } = useSocket();
+
+  const isOnline = onlineUsers?.some((onlineUser) => onlineUser.userId === user.id);
 
   const handleLogout = () => {
     dispatch(logout())
@@ -53,8 +57,13 @@ const ProfileInfo = () => {
                   : user?.email?.split("").shift()}
               </div>
             )}
+            
           </Avatar>
+          {isOnline && (
+            <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-[#2a2b33]"></div>
+          )}
         </div>
+        
         <div>
           {user.firstName && user.lastName
             ? `${user.firstName} ${user.lastName}`

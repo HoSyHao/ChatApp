@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import { Navigate, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { verify } from '../Features/authSlice';
+import { logout, verify } from '../Features/authSlice';
 import { useEffect } from 'react';
 
 const PrivateRoute = ({ element: Component }) => {
@@ -16,6 +16,8 @@ const PrivateRoute = ({ element: Component }) => {
         await dispatch(verify()).unwrap();
       } catch (error) {
         console.log('Failed to verify:', error);
+        // Nếu xác thực thất bại, thực hiện logout và điều hướng đến trang đăng nhập
+        dispatch(logout());
       }
     };
 
@@ -23,14 +25,13 @@ const PrivateRoute = ({ element: Component }) => {
   }, [dispatch]);
 
   if (!user) {
-    localStorage.removeItem("user")
     return <Navigate to="/login" replace />;
   }
 
   if (!user.profileSetup && location.pathname !== "/profile") {
     return <Navigate to="/profile" replace />;
   }
-  
+
   return <Component />;
 };
 

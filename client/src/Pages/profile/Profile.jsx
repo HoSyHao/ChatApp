@@ -44,15 +44,18 @@ function Profile() {
   const fileInputRef = useRef(null);
 
   useEffect(() => {
-    if (user && user.profileSetup === false) {
-      toast.error("Please setup profile to continue.");
-    } else {
-      dispatch(setFirstName(user.firstName));
-      dispatch(setLastName(user.lastName));
-      dispatch(setSelectedColor(user.color));
-      if (user.image) {
-        dispatch(setImage(`${HOST}/${user.image}`));
-        dispatch(setTempImage(`${HOST}/${user.image}`));
+    if (user) {
+      if (user.profileSetup === false) {
+        toast.error("Please setup profile to continue.");
+       
+      } else {
+        dispatch(setFirstName(user.firstName));
+        dispatch(setLastName(user.lastName));
+        dispatch(setSelectedColor(user.color));
+        if (user.image) {
+          dispatch(setImage(`${HOST}/${user.image}`));
+          dispatch(setTempImage(`${HOST}/${user.image}`));
+        }
       }
     }
   }, [user]);

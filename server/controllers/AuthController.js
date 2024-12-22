@@ -138,6 +138,8 @@ export const forgotPassword = async (request, response) => {
   }
 };
 
+
+// Chưa nhâp mật khẩu mới đã mã hóa vào DB
 export const resetPassword = async (request, response) => {
   const { token } = request.params;
   const { password } = request.body;
@@ -150,7 +152,7 @@ export const resetPassword = async (request, response) => {
   } catch (error) {
     return response.json("invalid token");
   }
-};
+}
 
 export const getAuthenticatedUser = async (request, response) => {
   try {

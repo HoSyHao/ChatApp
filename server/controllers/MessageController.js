@@ -39,6 +39,7 @@ export const uploadFile = async (request, response) => {
     const date = Date.now();
     let fileDir =`uploads/files/${date}`
     let fileName =`${fileDir}/${request.file.originalname}`
+    
 
     mkdirSync(fileDir,{recursive:true})
 

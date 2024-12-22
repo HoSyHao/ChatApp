@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Logo from "@/Components/Logo.jsx";
 import ProfileInfo from "./components/profile-info";
 import NewDM from "./components/new-dm";
@@ -19,6 +19,8 @@ function ContactsContainer() {
 
   const { directMessagesContacts } = useSelector((state) => state.chat);
   const { channels } = useSelector((state) => state.contacts);
+
+  
 
   useEffect(() => {
     const getContacts = async () => {

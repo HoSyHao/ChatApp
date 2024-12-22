@@ -17,6 +17,8 @@ import { IoMdArrowRoundDown } from "react-icons/io";
 import { IoCloseSharp } from "react-icons/io5";
 import { Avatar, AvatarFallback, AvatarImage } from "@/Components/ui/avatar";
 import { getColor } from "@/lib/utils";
+import { ScrollArea } from "@/Components/ui/scroll-area";
+
 
 const MessageContainer = () => {
   const scrollRef = useRef();
@@ -49,13 +51,10 @@ const MessageContainer = () => {
 
     const handleGetChannelMessages = async () => {
       try {
-        console.log("Selected Chat Data:", selectedChatData);
-
         const response = await dispatch(
           getChannelMessages({ id: selectedChatData._id })
         ).unwrap();
         if (response) {
-          console.log("Messages from Redux:", response); // Thêm log để kiểm tra dữ liệu
           dispatch(setSelectedChatMessages(response));
         }
       } catch (error) {
@@ -87,6 +86,7 @@ const MessageContainer = () => {
       const messageDate = moment(message.timestamp).format("YYYY-MM-DD");
       const showDate = messageDate !== lastDate;
       lastDate = messageDate;
+      const isLastMessage = index === selectedChatMessages.length - 1;
       return (
         <div key={index}>
           {showDate && (
@@ -94,8 +94,10 @@ const MessageContainer = () => {
               {moment(message.timestamp).format("LL")}
             </div>
           )}
-          {selectedChatType === "contact" && renderDMMessages(message)}
-          {selectedChatType === "channel" && renderChannelMessages(message)}
+          {selectedChatType === "contact" &&
+            renderDMMessages(message, isLastMessage)}
+          {selectedChatType === "channel" &&
+            renderChannelMessages(message, isLastMessage)}
         </div>
       );
     });
@@ -121,77 +123,84 @@ const MessageContainer = () => {
     }
   };
 
-  const renderDMMessages = (message) => (
-    <div
-      className={`${
-        message.sender === selectedChatData._id ? "text-left" : "text-right"
-      }`}
-    >
-      {message.messageType === "text" && (
-        <div
-          className={`${
-            message.sender !== selectedChatData._id
-              ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
-              : "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
-          } border inline-block p-4 rounded my-1 max-w-[50%] breaks-words`}
-        >
-          {message.content}
-        </div>
-      )}
-
-      {message.messageType === "file" && (
-        <div
-          className={`${
-            message.sender !== selectedChatData._id
-              ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
-              : "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
-          } border inline-block p-4 rounded my-1 max-w-[50%] breaks-words`}
-        >
-          {checkIfImage(message.fileUrl) ? (
-            <div
-              className="cursor-pointer"
-              onClick={() => {
-                dispatch(setShowImage(true));
-                dispatch(setImageUrl(message.fileUrl));
-              }}
-            >
-              <img
-                src={`${HOST}/${message.fileUrl}`}
-                height={300}
-                width={300}
-              />
-            </div>
-          ) : (
-            <div className="flex items-center justify-center gap-5">
-              <span className="text-white/80 text-3xl bg-black/20 rounded-full p-3">
-                <MdFolderZip />
-              </span>
-              <span>{message.fileUrl.split("/").pop()}</span>
-              <span
-                className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
-                onClick={() => downloadFile(message.fileUrl)}
-              >
-                <IoMdArrowRoundDown />
-              </span>
-            </div>
-          )}
-        </div>
-      )}
-      <div className="text-xs text-gray-600">
-        {moment(message.timestamp).format("LT")}
-      </div>
-    </div>
-  );
-
-  const renderChannelMessages = (message) => {
+  const renderDMMessages = (message, isLastMessage) => {
     const fileUrl = message.fileUrl || ""; // Đảm bảo fileUrl luôn là một chuỗi
-    console.log("Message Data:", message);
-
-    return (
+    const isSender = message.sender === user.id;
+  
+    const messageContent = (
+      <div
+        className={`${
+          isSender ? "text-right" : "text-left"
+        } relative group`}
+      >
+        {message.messageType === "text" && (
+          <div
+            className={`${
+              isSender
+                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                : "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
+            } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
+          >
+            {message.content}
+          </div>
+        )}
+  
+        {message.messageType === "file" && (
+          <div
+            className={`${
+              isSender
+                ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
+                : "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
+            } border inline-block p-4 rounded my-1 max-w-[50%] break-words`}
+          >
+            {checkIfImage(fileUrl) ? (
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  dispatch(setShowImage(true));
+                  dispatch(setImageUrl(message.fileUrl));
+                }}
+              >
+                <img
+                  src={`${HOST}/${message.fileUrl}`}
+                  height={300}
+                  width={300}
+                />
+              </div>
+            ) : (
+              <div className="flex items-center justify-center gap-5">
+                <span className="text-white/80 text-3xl bg-black/20 rounded-full p-3">
+                  <MdFolderZip />
+                </span>
+                <span>{message.fileUrl.split("/").pop()}</span>
+                <span
+                  className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+                  onClick={() => downloadFile(message.fileUrl)}
+                >
+                  <IoMdArrowRoundDown />
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+  
+        <div className={`text-xs ${isLastMessage ? "text-white/60 mt-1" : "text-gray-600 hidden group-hover:block"}`}>
+          {moment(message.timestamp).fromNow()}
+        </div>
+      </div>
+    );
+  
+    return messageContent;
+  };
+  
+  const renderChannelMessages = (message, isLastMessage) => {
+    const fileUrl = message.fileUrl || ""; // Đảm bảo fileUrl luôn là một chuỗi
+  
+    const messageContent = (
       <div
         className={`mt-5 ${
           message.sender._id !== user.id ? "text-left" : "text-right"
-        }`}
+        } relative group`}
       >
         {message.messageType === "text" && (
           <div
@@ -210,7 +219,7 @@ const MessageContainer = () => {
               message.sender._id === user.id
                 ? "bg-[#8417ff]/5 text-[#8417ff]/90 border-[#8417ff]/50"
                 : "bg-[#2a2b33]/5 text-white/80 border-[#ffffff]/20"
-            } border inline-block p-4 rounded my-1 max-w-[50%] breaks-words ml-9`}
+            } border inline-block p-4 rounded my-1 max-w-[50%] break-words ml-9`}
           >
             {checkIfImage(fileUrl) ? (
               <div
@@ -255,60 +264,62 @@ const MessageContainer = () => {
                   message.sender.color
                 )}`}
               >
-                {message.sender.firstName
+                {message.sender?.firstName
                   ? message.sender.firstName.split("").shift()
-                  : message.sender.email.split("").shift()}
+                  : message.sender?.email?.split("").shift()}
               </AvatarFallback>
             </Avatar>
             <span className="text-sm text-white/60">{`${message.sender.firstName} ${message.sender.lastName}`}</span>
-            <span className="text-xs text-white/60">
-              {moment(message.timestamp).format("LT")}
+            <span className="text-xs text-white/60 hidden group-hover:block">
+              {moment(message.timestamp).fromNow()}
             </span>
           </div>
         ) : (
-          <div>
-            <span className="text-xs text-white/60 mt-1">
-              {moment(message.timestamp).format("LT")}
-            </span>
+          <div className={`text-xs ${isLastMessage ? "text-white/60 mt-1" : "text-gray-600 hidden group-hover:block transition-1000"}`}>
+            {moment(message.timestamp).fromNow()}
           </div>
         )}
       </div>
     );
+  
+    return messageContent;
   };
 
   return (
-    <div className="flex-1 overflow-y-auto scrollbar-hidden p-4 px-8 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] w-full">
-      {renderMessages()}
-      <div ref={scrollRef}>
-        {showImage && (
-          <div className="fixed z-[1000] top-0 left-0 h-[100vh] w-[100vw] flex items-center justify-center backdrop-blur-lg flex-col">
-            <div>
-              <img
-                src={`${HOST}/${imageUrl}`}
-                className="h-[80vh] w-full bg-cover"
-              />
+    <ScrollArea className="flex-1 overflow-y-auto scrollbar-hidden p-4 px-8 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] w-full">
+      <div>
+        {renderMessages()}
+        <div ref={scrollRef}>
+          {showImage && (
+            <div className="fixed z-[1000] top-0 left-0 h-[100vh] w-[100vw] flex items-center justify-center backdrop-blur-lg flex-col">
+              <div>
+                <img
+                  src={`${HOST}/${imageUrl}`}
+                  className="h-[80vh] w-full bg-cover"
+                />
+              </div>
+              <div className="flex gap-5 fixed top-0 mt-5">
+                <button
+                  className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+                  onClick={() => downloadFile(imageUrl)}
+                >
+                  <IoMdArrowRoundDown />
+                </button>
+                <button
+                  className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
+                  onClick={() => {
+                    dispatch(setShowImage(false));
+                    dispatch(setImageUrl(null));
+                  }}
+                >
+                  <IoCloseSharp />
+                </button>
+              </div>
             </div>
-            <div className="flex gap-5 fixed top-0 mt-5">
-              <button
-                className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
-                onClick={() => downloadFile(imageUrl)}
-              >
-                <IoMdArrowRoundDown />
-              </button>
-              <button
-                className="bg-black/20 p-3 text-2xl rounded-full hover:bg-black/50 cursor-pointer transition-all duration-300"
-                onClick={() => {
-                  dispatch(setShowImage(false));
-                  dispatch(setImageUrl(null));
-                }}
-              >
-                <IoCloseSharp />
-              </button>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
-    </div>
+    </ScrollArea>
   );
 };
 

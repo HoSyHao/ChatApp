@@ -32,7 +32,6 @@ import { HOST } from "@/Utils/constants";
 const NewDM = () => {
   const dispatch = useDispatch();
 
-
   const { openContactModal, searchedContacts } = useSelector(
     (state) => state.contacts
   );
@@ -47,7 +46,9 @@ const NewDM = () => {
         } else {
           dispatch(setSearchedContacts([]));
         }
-      } 
+      } else {
+        dispatch(setSearchedContacts([]));
+      }
     } catch (error) {
       console.log(error);
       dispatch(setSearchedContacts([]));
@@ -55,13 +56,12 @@ const NewDM = () => {
   };
 
   const selectNewContact = (contact) => {
-    dispatch(setOpenContactModal(false));
+    console.log("Contact selected:", contact);
+    dispatch(setSearchedContacts([]));
     dispatch(setSelectedChatType("contact"));
     dispatch(setSelectedChatData(contact));
-    dispatch(setSearchedContacts([]));
+    dispatch(setOpenContactModal(false));
   };
-
-  
 
   return (
     <>
@@ -69,7 +69,7 @@ const NewDM = () => {
         <Tooltip>
           <TooltipTrigger>
             <FaPlus
-              className="text-neutral-400 font-light text-opacity-90 text-start hover:text-neutral-100 cusor-pointer transition-all duration-300"
+              className="text-neutral-400 font-light text-opacity-90 text-start hover:text-neutral-100 cursor-pointer transition-all duration-300"
               onClick={() => dispatch(setOpenContactModal(true))}
             />
           </TooltipTrigger>
@@ -81,7 +81,12 @@ const NewDM = () => {
 
       <Dialog
         open={openContactModal}
-        onOpenChange={() => dispatch(setOpenContactModal(false))}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            dispatch(setSearchedContacts([]));
+          }
+          dispatch(setOpenContactModal(isOpen));
+        }}
       >
         <DialogContent className="bg-[#181920] border-none text-white w-[400px] h-[400px] flex flex-col">
           <DialogHeader>
@@ -91,7 +96,10 @@ const NewDM = () => {
           <div>
             <Input
               placeholder="Search Contacts"
-              onChange={(e) => handleSearchContacts(e.target.value)}
+              onChange={(e) => {
+                handleSearchContacts(e.target.value);
+                e.target.blur(); // Xóa trạng thái focus
+              }}
               className="rounded-lg p6 bg-[#2c2e3b] border-none"
             />
           </div>
