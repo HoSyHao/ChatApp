@@ -49,19 +49,21 @@ const CreateChannel = () => {
     try {
       if (channelName.length > 0 && selectedContacts.length > 0) {
         const response = await dispatch(createChannel(channelName)).unwrap();
+        console.log("New Channel Created:", response); // Kiểm tra dữ liệu trả về
         dispatch(setChannelName(""));
         dispatch(setSelectedContacts([]));
         dispatch(setNewChannelModal(false));
         dispatch(addChannel(response));
-
-        // Gọi lại getUserChannel để cập nhật danh sách kênh
+  
         const channelsResponse = await dispatch(getUserChannel()).unwrap();
+        console.log("Updated Channels:", channelsResponse); // Kiểm tra danh sách sau cập nhật
         dispatch(setChannels(channelsResponse));
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error in handleCreateChannel:", error);
     }
   };
+  
 
   return (
     <>
