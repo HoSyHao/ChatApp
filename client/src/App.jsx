@@ -7,13 +7,13 @@ import Register from './Pages/auth/Register';
 import ResetPassword from './Pages/auth/ResetPassword';
 import ForgotPassword from './Pages/auth/ForgotPassword';
 import Home from './Pages/chat/Home';
-import PrivateRoute from './Components/PrivateRoute';
+import PrivateRoute from './components/PrivateRoute';
 import { Navigate, Route, Routes, BrowserRouter } from 'react-router-dom';
 import Profile from './Pages/profile/Profile';
-import AuthRoute from './Components/AuthRoute';
+import AuthRoute from './components/AuthRoute';
 import CallNotification from './Pages/call/components/CallNotification';
 import Call from './Pages/call';
-import VideoCall from './Pages/call/components/VideoCall';
+
 
 function App() {
   return (

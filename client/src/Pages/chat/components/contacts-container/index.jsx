@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from "react";
-import Logo from "@/Components/Logo.jsx";
+import Logo from "@/components/Logo.jsx";
 import ProfileInfo from "./components/profile-info";
 import NewDM from "./components/new-dm";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,9 +10,9 @@ import {
   setChannels,
 } from "@/Features/contactsSlice";
 import { setDirectMessagesContacts } from "@/Features/chatSlice";
-import ContactList from "@/Components/ui/contact-list";
+import ContactList from "@/components/ui/contact-list";
 import CreateChannel from "./components/create-channel";
-import { ScrollArea } from "@/Components/ui/scroll-area";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 function ContactsContainer() {
   const dispatch = useDispatch();

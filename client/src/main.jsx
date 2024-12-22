@@ -4,7 +4,7 @@ import App from "./App.jsx";
 import { Provider } from "react-redux";
 import store from "./Store/index.js";
 import axios from "axios";
-import { Toaster } from "./Components/ui/sonner.jsx";
+import { Toaster } from "./components/ui/sonner.jsx";
 import { SocketProvider } from "./context/SocketContext.jsx"; // Cập nhật đường dẫn nhập khẩu
 
 axios.defaults.withCredentials = true; // Bật gửi cookies trong Axios

@@ -1,6 +1,6 @@
 import { useSocket } from "@/context/SocketContext.jsx";
 import React from "react";
-import { Avatar, AvatarImage } from "@/Components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { MdCall, MdCallEnd } from "react-icons/md";
 import { HOST } from "@/Utils/constants";
 import { getColor } from "@/lib/utils";

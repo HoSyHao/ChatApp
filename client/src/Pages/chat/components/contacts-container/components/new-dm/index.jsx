@@ -24,8 +24,8 @@ import {
 } from "@/Features/contactsSlice";
 import { setSelectedChatData, setSelectedChatType } from "@/Features/chatSlice";
 import { FaPlus } from "react-icons/fa";
-import { Input } from "@/Components/ui/input";
-import { ScrollArea } from "@/Components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
 import { HOST } from "@/Utils/constants";
 

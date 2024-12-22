@@ -27,9 +27,9 @@ import {
 } from "@/Features/contactsSlice";
 
 import { FaPlus } from "react-icons/fa";
-import { Input } from "@/Components/ui/input";
-import { Button } from "@/Components/ui/button";
-import MultipleSelector from "@/Components/ui/multipleselect";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import MultipleSelector from "@/components/ui/multipleselect";
 
 const CreateChannel = () => {
   const dispatch = useDispatch();

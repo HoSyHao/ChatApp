@@ -1,7 +1,7 @@
 import { closeChat } from "@/Features/chatSlice";
 import { getColor } from "@/lib/utils";
 import { HOST } from "@/Utils/constants";
-import { Avatar, AvatarImage } from "@/Components/ui/avatar";
+import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import React from "react";
 import { RiCloseFill } from "react-icons/ri";
 import { useDispatch, useSelector } from "react-redux";
